@@ -185,8 +185,12 @@ config MD_FAULTY
 
 	  In unsure, say N.
 
+config BLK_DEV_DM_BUILTIN
+	boolean
+
 config BLK_DEV_DM
 	tristate "Device mapper support"
+	select BLK_DEV_DM_BUILTIN
 	---help---
 	  Device-mapper is a low level volume manager.  It works by allowing
 	  people to specify mappings for ranges of logical sectors.  Various
@@ -207,6 +211,14 @@ config DM_DEBUG
 	  Enable this for messages that may help debug device-mapper problems.
 
 	  If unsure, say N.
+
+config DM_BUFIO
+       tristate
+       depends on BLK_DEV_DM
+       ---help---
+	 This interface allows you to do buffered I/O on a device and acts
+	 as a cache, holding recently-read blocks in memory and performing
+	 delayed writes.
 
 config DM_CRYPT
 	tristate "Crypt target support"
@@ -333,5 +345,25 @@ config DM_FLAKEY
        depends on BLK_DEV_DM && EXPERIMENTAL
        ---help---
          A target that intermittently fails I/O for debugging purposes.
+
+config DM_VERITY
+	tristate "Verity target support (EXPERIMENTAL)"
+	depends on BLK_DEV_DM && EXPERIMENTAL
+	select CRYPTO
+	select CRYPTO_HASH
+	select DM_BUFIO
+	---help---
+	  This device-mapper target creates a read-only device that
+	  transparently validates the data on one underlying device against
+	  a pre-generated tree of cryptographic checksums stored on a second
+	  device.
+
+	  You'll need to activate the digests you're going to use in the
+	  cryptoapi configuration.
+
+	  To compile this code as a module, choose M here: the module will
+	  be called dm-verity.
+
+	  If unsure, say N.
 
 endif # MD

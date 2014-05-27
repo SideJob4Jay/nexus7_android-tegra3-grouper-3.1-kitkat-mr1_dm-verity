@@ -74,7 +74,9 @@ u32 sas_get_pr_transport_id(
 	 */
 	ptr = &se_nacl->initiatorname[4]; /* Skip over 'naa. prefix */
 
-	hex2bin(&buf[4], ptr, 8);
+	ret = hex2bin(&buf[4], ptr, 8);
+	if (ret < 0)
+		pr_debug("sas transport_id: invalid hex string\n");
 
 	/*
 	 * The SAS Transport ID is a hardcoded 24-byte length
@@ -174,7 +176,9 @@ u32 fc_get_pr_transport_id(
 			i++;
 			continue;
 		}
-		hex2bin(&buf[off++], &ptr[i], 1);
+		ret = hex2bin(&buf[off++], &ptr[i], 1);
+		if (ret < 0)
+			pr_debug("fc transport_id: invalid hex string\n");
 		i += 2;
 	}
 	/*

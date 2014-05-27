@@ -53,16 +53,17 @@ struct dm_io {
 	spinlock_t endio_lock;
 };
 
-/*
- * For bio-based dm.
- * One of these is allocated per target within a bio.  Hopefully
- * this will be simplified out one day.
- */
-struct dm_target_io {
-	struct dm_io *io;
-	struct dm_target *ti;
-	union map_info info;
-};
+// change to "include/linux/driver-mapper.h"
+///*
+// * For bio-based dm.
+// * One of these is allocated per target within a bio.  Hopefully
+// * this will be simplified out one day.
+// */
+//struct dm_target_io {
+//	struct dm_io *io;
+//	struct dm_target *ti;
+//	union map_info info;
+//};
 
 /*
  * For request-based dm.
